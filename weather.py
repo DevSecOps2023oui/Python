@@ -8,8 +8,10 @@ import os
 import shutil
 
 while True:
-    # DATE CSV
-    os.mkdir('./zipFile')
+    if not os.path.exists('./csv'):
+        os.mkdir('./zipFile')
+    
+    # Current date and time for file name
     now = datetime.now()
     dt_string = now.strftime("%d-%m-%Y-%H-%M-%S")
 
@@ -18,6 +20,7 @@ while True:
     local_file_csv = './csv/weather-' + dt_string + '.csv'
     remote_path_zip = "/home/ubuntu/NodeWatcher/dist/csv/new/weather-" + dt_string + ".zip"
 
+    # PARAMETRES DE GENERATION DE FICHIER
     duration = 5
     start_time = time.time()
     end_time = start_time + duration
@@ -50,9 +53,8 @@ while True:
 
     # A FAIRE : Chiffrement RSA
     # LECTURE PUBLIC KEY
-    # clé privé et public déjà créé
 
-    # with open('./key/public_rsa.pem', 'rb') as key_file:
+    # with open('./key/id_rsa.pub', 'rb') as key_file:
     #    key_data = key_file.read()
     #   pub_key = rsa.PublicKey.load_pkcs1(key_data)
     # Encrypt CSV
@@ -67,7 +69,7 @@ while True:
     client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 
     # Spécifiez la clé privée à utiliser pour l'authentification
-    private_key = paramiko.RSAKey.from_private_key_file("../.ssh/id_rsa")
+    private_key = paramiko.RSAKey.from_private_key_file("./.ssh/id_rsa")
 
     # Connexion au serveur distant
     client.connect(hostname="141.145.211.53", username="ubuntu", pkey=private_key)
